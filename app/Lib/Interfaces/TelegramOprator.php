@@ -3,12 +3,12 @@
 namespace App\Lib\Interfaces;
 abstract class TelegramOprator extends TelegramVarables
 {
-    public $user, $update,$class_status;
+    public $user,$update,$class_status;
 
     public function __construct($update)
     {
         parent::__construct($update);
-        if ($this->initCheck()) {
+        if ($this->initCheck()==true) {
             $this->handel();
             $this->class_status =  true;
 
