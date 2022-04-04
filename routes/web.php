@@ -17,3 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::post('/telegram',[\App\Http\Controllers\TelegramController::class,'init']);
+Route::get('/BuySubscription/{id}',[\App\Http\Controllers\GateWayController::class,'init'])->name('pay.redirect');

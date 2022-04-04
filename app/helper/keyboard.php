@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Plan as Plan;
 use Telegram\Bot\Keyboard\Keyboard;
 
 function mainMenu($isVip=false)
@@ -96,26 +97,27 @@ if (!function_exists('shotBackButton')) {
         return Keyboard::make(['keyboard' => $btn, 'resize_keyboard' => true, 'one_time_keyboard' => true]);
     }
 }
-if (!function_exists('activateUser')) {
-    function activateUser($id, $chat_id)
+if (!function_exists('plans_key')) {
+    function plans_key()
     {
+        $plans = Plan::orderBy('day','asc')->get();
+        $arr = [];
+        foreach ($plans as $plan){
+            $arr[] = [[
+                'text' => str('اشتراک ')
+                    ->append($plan->day)
+                    ->append("به قیمت")
+                    ->append(number_format($plan->price))
+                    ->append("ریال")
+                ->toString()
+
+                ,
+                'callback_data' => "vip-{$plan->id}"
+            ]];
+        }
         return keyboard::make([
             'inline_keyboard' => [
-                [
-                    [
-                        'text' => "تایید",
-                        'callback_data' => "activate-$id-$chat_id"
-                    ],
-                    [
-                        'text' => "رد",
-                        'callback_data' => "deactive-$id-$chat_id"
-                    ],
-                    [
-                        'text' => "بلاک",
-                        'callback_data' => "block-$id-$chat_id"
-                    ],
-
-                ]
+                $arr
             ],
         ]);
     }

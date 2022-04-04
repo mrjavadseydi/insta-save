@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('status')->default(-1);
             $table->integer('amount');
             $table->integer('token')->nullable();
+            $table->foreignId('plan_id')->constrained()->onDelete('cascade');
             $table->bigInteger('order');
             $table->timestamps();
         });
