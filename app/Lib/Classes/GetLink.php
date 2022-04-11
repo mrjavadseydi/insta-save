@@ -47,7 +47,15 @@ class GetLink  extends TelegramOprator
             ]);
             return false;
         }
+        if(\Cache::has('download_'.$this->chat_id)){
+            sendMessage([
+                'chat_id'=>$this->chat_id,
+                'text'=>str()->append("شما در هر دقیقه تنها یکبار میتوانید درخواست دانلود ارسال کنید")->toString()
 
+            ]);
+            return 0;
+        }
+        \Cache::put('download_'.$this->chat_id,'1',60);
         switch ($check){
             case "profile":
                 GetProfileJob::dispatch($this->text,$this->chat_id);

@@ -38,7 +38,7 @@ class LoginJob implements ShouldQueue
      */
     public function handle()
     {
-        $request = Http::get('http://194.5.192.39:8000/auth/login', [
+        $request = Http::asForm()->post('http://194.5.192.39:8000/auth/login', [
             'username' => $this->username,
             'password' => $this->password,
         ]);
