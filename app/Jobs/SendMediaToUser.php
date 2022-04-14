@@ -35,10 +35,11 @@ class SendMediaToUser implements ShouldQueue
     {
         $type = mime_content_type(public_path($this->media));
         if (!$type){
-            return sendMessage([
+            sendMessage([
                 'chat_id' => $this->chat_id,
                 'text'=>'فرمت فایل شناسایی نشد'
             ]);
+            return \Storage::disk('public')->delete($this->media);
         }
         $ex  = explode('/',$type);
         $file = InputFile::create(
@@ -48,17 +49,23 @@ class SendMediaToUser implements ShouldQueue
         if ($ex[0] == 'image') {
 
             \Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
-            return sendPhoto([
+            sendPhoto([
                 'chat_id' => $this->chat_id,
                 'photo' => $file
             ]);
         }elseif ($ex[0] == 'video'){
             \Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
-            return sendVideo([
+            sendVideo([
                 'chat_id' => $this->chat_id,
                 'video' => $file
             ]);
+        }else{
+            sendMessage([
+                'chat_id' => $this->chat_id,
+                'text'=>'فرمت فایل شناسایی نشد'
+            ]);
         }
+        return \Storage::disk('public')->delete($this->media);
 
     }
 }

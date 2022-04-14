@@ -38,14 +38,7 @@ class GetStoryJob implements ShouldQueue
      */
     public function handle()
     {
-        $subscribe = Subscription::where('chat_id', $this->chat_id)->whereBetween(now(),
-            ['start', 'end']
-        )->first();
-        if ($subscribe) {
-            $coockie = Page::inRandomOrder()->first()->coockie;
-        } else {
-            $coockie = Page::where('chat_id', $this->chat_id)->first()->coockie;
-        }
+    $coockie = getCookie($this->chat_id);
         $url = $this->url;
         $ex = array_filter(explode('/', $url));
         $id = end($ex);
@@ -67,4 +60,6 @@ class GetStoryJob implements ShouldQueue
         SendMediaToUser::dispatch($this->chat_id,$file_temp_name);
         //mime_content_type
     }
+
+
 }

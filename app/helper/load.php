@@ -3,6 +3,8 @@
 
 use App\Models\Config as Config;
 use App\Models\Member as Member;
+use App\Models\Page;
+use App\Models\Subscription;
 use Telegram\Bot\Exceptions\TelegramResponseException;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use \Illuminate\Support\Facades\Cache;
@@ -212,5 +214,19 @@ if(!function_exists('isJson')) {
     {
         json_decode($string);
         return json_last_error() === JSON_ERROR_NONE;
+    }
+}
+if (!function_exists('getCookie')) {
+    function getCookie($chat_id)
+    {
+        $subscribe = Subscription::where('chat_id', $chat_id)->whereBetween(now(),
+            ['start', 'end']
+        )->first();
+        if ($subscribe) {
+            $coockie = Page::inRandomOrder()->first()->coockie;
+        } else {
+            $coockie = Page::where('chat_id', $chat_id)->first()->coockie;
+        }
+        return $coockie;
     }
 }
