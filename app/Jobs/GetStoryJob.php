@@ -11,17 +11,20 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class GetStoryJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public $url ,$chat_id;
+
+    public $url, $chat_id;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($url,$chat_id)
+    public function __construct($url, $chat_id)
     {
         $this->url = $url;
         $this->chat_id = $chat_id;
@@ -35,23 +38,33 @@ class GetStoryJob implements ShouldQueue
      */
     public function handle()
     {
-        $subscribe = Subscription::where('chat_id',$this->chat_id)->whereBetween(now(),
-            ['start','end']
+        $subscribe = Subscription::where('chat_id', $this->chat_id)->whereBetween(now(),
+            ['start', 'end']
         )->first();
-        if ($subscribe){
-            $coockie = Page::orderBy('id','asc')->first()->coockie;
-        }else{
-            $coockie = Page::where('chat_id',$this->chat_id)->first()->coockie;
+        if ($subscribe) {
+            $coockie = Page::inRandomOrder()->first()->coockie;
+        } else {
+            $coockie = Page::where('chat_id', $this->chat_id)->first()->coockie;
         }
         $url = $this->url;
-        $ex =array_filter(explode('/',$url));
+        $ex = array_filter(explode('/', $url));
         $id = end($ex);
-        //16705606368%3AdZAgjw7y9zBM3S%3A1311
-        $request = Http::asForm()->post("http://194.5.192.39:8000/story/download/",[
+        //6705606368%3AdZAgjw7y9zBM3S%3A13
+        $request = Http::asForm()->post("http://194.5.192.39:8000/story/download/", [
             'sessionid' => $coockie,
             'story_pk' => $id,
-            'return_file'=>true,
+            'return_file' => true,
         ]);
+        if (isJson($request->body())) {
+            return sendMessage([
+                'chat_id' => $this->chat_id,
+                'text' => 'دانلود نا موفق بود لطفا بعد از ۲ دقیقه مجددا تلاش کنید',
+            ]);
+        }
+
+        $file_temp_name = uniqid();
+        Storage::disk('public')->put($file_temp_name, $request->body());
+        SendMediaToUser::dispatch($this->chat_id,$file_temp_name);
         //mime_content_type
     }
 }
