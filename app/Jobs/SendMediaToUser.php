@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 use Telegram\Bot\FileUpload\InputFile;
 
 class SendMediaToUser implements ShouldQueue
@@ -39,7 +40,7 @@ class SendMediaToUser implements ShouldQueue
                 'chat_id' => $this->chat_id,
                 'text'=>'فرمت فایل شناسایی نشد'
             ]);
-            return \Storage::disk('public')->delete($this->media);
+            return Storage::disk('public')->delete($this->media);
         }
         $ex  = explode('/',$type);
         $file = InputFile::create(
@@ -48,13 +49,13 @@ class SendMediaToUser implements ShouldQueue
         );
         if ($ex[0] == 'image') {
 
-            \Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
+//            Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
             sendPhoto([
                 'chat_id' => $this->chat_id,
                 'photo' => $file
             ]);
         }elseif ($ex[0] == 'video'){
-            \Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
+//            Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
             sendVideo([
                 'chat_id' => $this->chat_id,
                 'video' => $file
@@ -65,7 +66,7 @@ class SendMediaToUser implements ShouldQueue
                 'text'=>'فرمت فایل شناسایی نشد'
             ]);
         }
-        return \Storage::disk('public')->delete($this->media);
+        return Storage::disk('public')->delete( $this->media);
 
     }
 }
