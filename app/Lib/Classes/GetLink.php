@@ -58,7 +58,9 @@ class GetLink  extends TelegramOprator
         \Cache::put('download_'.$this->chat_id,'1',60);
         switch ($check){
             case "profile":
-                GetProfileJob::dispatch($this->text,$this->chat_id);
+                $username = str_replace('https://www.instagram.com/','',$this->text);
+                $username = str_replace('/','',$username);
+                GetProfileJob::dispatch($username,$this->chat_id);
                 break;
             case "post":
                 GetPostJob::dispatch($this->text,$this->chat_id);
