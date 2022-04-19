@@ -46,11 +46,11 @@ class GetPostJob implements ShouldQueue
     }
     public function getInfo(){
 
-        $request = Http::asForm()->post('http://194.5.192.39:8000/media/pk_from_url', [
+        $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/media/pk_from_url', [
             'url'=>$this->link,
         ]);
         $pk = $request->body();
-        $request = Http::asForm()->post('http://194.5.192.39:8000/media/info',[
+        $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/media/info',[
             'sessionid'=>$this->cookie,
             'pk'=>$pk,
         ]);

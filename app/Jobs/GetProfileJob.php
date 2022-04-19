@@ -35,18 +35,18 @@ class GetProfileJob implements ShouldQueue
     public function handle()
     {
         $cookie = getCookie($this->chat_id);
-        $request = Http::asForm()->post('http://194.5.192.39:8000/user/id_from_username',[
+        $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/user/id_from_username',[
             'username' => $this->username,
             'cookie' => $cookie
         ]);
         $id = $request->body();
-        $request = Http::asForm()->post('http://194.5.192.39:8000/user/info',[
+        $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/user/info',[
             'id' => $id,
             'cookie' => $cookie
         ]);
         $response = json_decode($request->body(),true);
         if (isset($response['profile_pic_url_hd'])) {
-            $request = Http::get($response['profile_pic_url_hd']);
+            $request = Http::timeout(130)->get($response['profile_pic_url_hd']);
             $file = $request->body();
             $file_temp_name = uniqid();
             Storage::disk('public')->put($file_temp_name,$file);

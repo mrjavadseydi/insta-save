@@ -8,7 +8,13 @@ use Illuminate\Support\Facades\Cache;
 class TelegramController extends Controller
 {
     public function init(Request $request){
+
         $update = $request->toArray();
+        if(Cache::has($request['update_id'])){
+            die();
+        }else{
+            Cache::put($request['update_id'],'1',100);
+        }
         for ($i=1;$i<4;$i++){
             foreach(config('telegram-classes.classes.'.$i) as $class){
                 $object = new $class($update);
@@ -16,6 +22,6 @@ class TelegramController extends Controller
                     return true;
             }
         }
-
+        return false;
     }
 }

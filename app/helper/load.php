@@ -219,13 +219,13 @@ if(!function_exists('isJson')) {
 if (!function_exists('getCookie')) {
     function getCookie($chat_id)
     {
-        $subscribe = Subscription::where('chat_id', $chat_id)->whereBetween(now(),
-            ['start', 'end']
-        )->first();
+        $user = Member::where('chat_id', $chat_id)->first();
+        $subscribe = Subscription::where('member_id',$user->id)->where("end",'>',now())->first();
+
         if ($subscribe) {
             $coockie = Page::inRandomOrder()->first()->coockie;
         } else {
-            $coockie = Page::where('chat_id', $chat_id)->first()->coockie;
+            $coockie = Page::where('member_id', $user->id)->first()->coockie;
         }
         return $coockie;
     }

@@ -16,5 +16,6 @@ class Start extends TelegramOprator
             'chat_id' => $this->chat_id,
             'text'=>'start!'
         ]);
+        setState($this->chat_id);
     }
 }

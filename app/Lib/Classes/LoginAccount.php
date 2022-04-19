@@ -18,7 +18,7 @@ class LoginAccount extends TelegramOprator
         if(\Cache::has('login_'.$this->chat_id)){
             sendMessage([
                 'chat_id'=>$this->chat_id,
-                'text'=>str()->append("شما در هر دقیقه تنها یکبار میتوانید برای افزودن اکانت تلاش کنید")->toString()
+                'text'=>str(" ")->append("شما در هر دقیقه تنها یکبار میتوانید برای افزودن اکانت تلاش کنید")->toString()
 
             ]);
             return 0;
@@ -28,7 +28,7 @@ class LoginAccount extends TelegramOprator
         if (count($ex)!=2){
             sendMessage([
                 'chat_id'=>$this->chat_id,
-                'text'=>str()->append("فرمت ارسالی صحیح نمیباشد ، لطفا در خط اول نام کاربری و در خط دوم پسورد اکانت خود راارسال کنید")->toString()
+                'text'=>str(" ")->append("فرمت ارسالی صحیح نمیباشد ، لطفا در خط اول نام کاربری و در خط دوم پسورد اکانت خود راارسال کنید")->toString()
 
             ]);
             return 0;

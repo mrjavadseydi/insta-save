@@ -6,10 +6,13 @@ return[
             \App\Lib\Classes\Start::class,
         ],
         2=>[
-
+            \App\Lib\Classes\LoginAccount::class,
+            \App\Lib\Classes\BuyVipCallBack::class
         ],
         3=>[
-
+            \App\Lib\Classes\AddAcount::class,
+            \App\Lib\Classes\GetLink::class,
+            \App\Lib\Classes\BuyVip::class,
         ]
     ]
 ];

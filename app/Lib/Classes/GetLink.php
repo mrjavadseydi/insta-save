@@ -27,10 +27,8 @@ class GetLink  extends TelegramOprator
                 'text'=>str('لینک ارسالی شما صحیح نمیباشد !')->toString()
             ]);
         }
-        $subscribe = Subscription::where('chat_id',$this->chat_id)->whereBetween(now(),
-            ['start','end']
-        )->first();
-        $cookie = Page::where('chat_id',$this->chat_id)->first();
+        $subscribe = Subscription::where('member_id',$this->user->id)->where("end",'>',now())->first();
+        $cookie = Page::where('member_id',$this->user->id)->first();
         if (!$subscribe&&!$cookie){
             sendMessage([
                 'chat_id'=>$this->chat_id,
@@ -63,11 +61,11 @@ class GetLink  extends TelegramOprator
                 GetProfileJob::dispatch($username,$this->chat_id);
                 break;
             case "post":
-                GetPostJob::dispatch($this->text,$this->chat_id);
-                break;
             case "igtv":
-                GetIgtvJob::dispatch($this->text,$this->chat_id);
+            GetPostJob::dispatch($this->text,$this->chat_id);
                 break;
+//                GetIgtvJob::dispatch($this->text,$this->chat_id);
+//                break;
             case "story":
                 GetStoryJob::dispatch($this->text,$this->chat_id);
                 break;

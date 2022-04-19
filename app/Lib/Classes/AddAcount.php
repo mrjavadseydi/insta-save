@@ -3,6 +3,7 @@
 namespace App\Lib\Classes;
 
 use App\Lib\Interfaces\TelegramOprator;
+use Illuminate\Support\Str;
 
 class AddAcount extends TelegramOprator
 {
@@ -15,15 +16,17 @@ class AddAcount extends TelegramOprator
     public function handel()
     {
         setState($this->chat_id,'add_account');
-        sendMessage([
-            'chat_id'=>$this->chat_id,
-            'text'=>str()->append('برای افزودن اکانت در خط اول نام کاربری و در خط دوم کلمه عبور خود را وارد کنید ')
+        $str = Str::of('برای افزودن اکانت در خط اول نام کاربری و در خط دوم کلمه عبور خود را وارد کنید')
             ->append("\n")
             ->append("مثال:")
+            ->append("\n")
             ->append("instauser")
             ->append("\n")
             ->append("password")
-            ->toString()
+            ->toString();
+        sendMessage([
+            'chat_id'=>$this->chat_id,
+            'text'=> $str
         ]);
     }
 

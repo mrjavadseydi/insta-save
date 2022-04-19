@@ -43,7 +43,7 @@ class GetStoryJob implements ShouldQueue
         $ex = array_filter(explode('/', $url));
         $id = end($ex);
         //6705606368%3AdZAgjw7y9zBM3S%3A13
-        $request = Http::asForm()->post("http://194.5.192.39:8000/story/download/", [
+        $request = Http::timeout(130)->asForm()->post("http://194.5.192.39:8000/story/download/", [
             'sessionid' => $coockie,
             'story_pk' => $id,
             'return_file' => true,
