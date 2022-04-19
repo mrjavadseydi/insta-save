@@ -39,7 +39,8 @@ class DownloadPhotoJob implements ShouldQueue
     {
         $request = Http::timeout(130)->asForm()->get($this->url);
         $file_temp_name = uniqid();
-        Storage::disk('public')->put($file_temp_name, $request->body());
+        file_put_contents(public_path($file_temp_name),$request->body());
+
         SendMediaToUser::dispatch($this->chat_id,$file_temp_name);
         if ($this->send_caption) {
             sendMessage([

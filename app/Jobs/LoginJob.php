@@ -55,18 +55,20 @@ class LoginJob implements ShouldQueue
                     'text' => $text,
                 ]);
 
-            } else {
-                sendMessage([
-                    'chat_id' => $this->chat_id,
-                    'text' => 'ورود موفقیت آمیز بود ! ',
-                ]);
-                Page::create([
-                    'member_id' => Member::where('chat_id', $this->chat_id)->first()->id,
-                    'username' => $this->username,
-                    'password' => $this->password,
-                    'coockie' => $body,
-                ]);
             }
+        } else {
+            sendMessage([
+                'chat_id' => $this->chat_id,
+                'text' => 'ورود موفقیت آمیز بود ! ',
+            ]);
+            Page::create([
+                'member_id' => Member::where('chat_id', $this->chat_id)->first()->id,
+                'username' => $this->username,
+                'password' => $this->password,
+                'coockie' => str_replace('"','',$body),
+            ]);
+            setState($this->chat_id);
         }
     }
+
 }

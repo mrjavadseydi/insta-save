@@ -37,22 +37,22 @@ class GetPostJob implements ShouldQueue
         $this->cookie = getCookie($this->chat_id);
         $info = $this->getInfo();
         if ($info['media_type']==8){
-            DownloadAlboumJob::dispatch($info,$this->chat_id);
+            DownloadAlboumJob::dispatch($info,$this->chat_id,$this->cookie);
         }elseif ($info['media_type']==2){
-            DownloadVideoJob::dispatch($this->chat_id);
+            DownloadVideoJob::dispatch($this->chat_id,$info['video_url'],$this->cookie,true,$info);
         }elseif ($info['media_type']==1){
-            DownloadPhotoJob::dispatch($this->chat_id);
+            DownloadPhotoJob::dispatch($this->chat_id,$info['thumbnail_url'],$this->cookie,true,$info);
         }
     }
     public function getInfo(){
 
-        $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/media/pk_from_url', [
+        $request = Http::timeout(130)->asForm()->get('http://194.5.192.39:8000/media/pk_from_url', [
             'url'=>$this->link,
         ]);
-        $pk = $request->body();
+        $pk = str_replace('"','',$request->body());
         $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/media/info',[
             'sessionid'=>$this->cookie,
-            'pk'=>$pk,
+            'pk'=>(int)$pk,
         ]);
         return json_decode($request->body(),true);
 

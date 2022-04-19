@@ -22,7 +22,7 @@ class GetLink  extends TelegramOprator
     {
         $check = $this->getType($this->text);
         if ($check=="error"){
-            sendMessage([
+            return sendMessage([
                 'chat_id'=>$this->chat_id,
                 'text'=>str('لینک ارسالی شما صحیح نمیباشد !')->toString()
             ]);
@@ -58,7 +58,7 @@ class GetLink  extends TelegramOprator
             case "profile":
                 $username = str_replace('https://www.instagram.com/','',$this->text);
                 $username = str_replace('/','',$username);
-                GetProfileJob::dispatch($username,$this->chat_id);
+                GetProfileJob::dispatch($this->chat_id,$username);
                 break;
             case "post":
             case "igtv":
@@ -80,7 +80,7 @@ class GetLink  extends TelegramOprator
         $validator = \Validator::make(['link'=>$link],[
             'link'=>'starts_with:https://www.instagram.com/',
         ]);
-        $ex = explode('/',str_replace('https://www.instagram.com/','',$link));
+        $ex = array_filter(explode('/',str_replace('https://www.instagram.com/','',$link)));
         if ($validator->fails()||count($ex)<1)
             return 'error';
 

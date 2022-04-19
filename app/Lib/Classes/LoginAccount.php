@@ -36,7 +36,7 @@ class LoginAccount extends TelegramOprator
         LoginJob::dispatch($this->chat_id,$ex[0],$ex[1]);
         sendMessage([
             'chat_id'=>$this->chat_id,
-            'text'=>str()->append('در حال ورود ، لطفا صبر کنید...')
+            'text'=>str('')->append('در حال ورود ، لطفا صبر کنید...')
             ->toString()
         ]);
     }
