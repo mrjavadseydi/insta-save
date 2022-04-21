@@ -37,10 +37,10 @@ class GetLink  extends TelegramOprator
                     ->append('برای دانلود نیاز است اکانت اینستاگرام خود را اضافه کنید')
                     ->append("\n")
                     ->append('برای اضافه کردن اکانت خود دستور /add را ارسال کنید .')
-                    ->append("\n")
-                    ->append("در صورت عدم تمایل به اضافه کردن حساب خود میتوانید اشتراک ویژه خریداری کنید و بدون اکانت دانلود کنید")
-                    ->append("\n")
-                    ->append("برای خرید اکانت ویژه دستور /vip را ارسال کنید.")
+//                    ->append("\n")
+//                    ->append("در صورت عدم تمایل به اضافه کردن حساب خود میتوانید اشتراک ویژه خریداری کنید و بدون اکانت دانلود کنید")
+//                    ->append("\n")
+//                    ->append("برای خرید اکانت ویژه دستور /vip را ارسال کنید.")
                     ->toString()
             ]);
             return false;
@@ -48,12 +48,12 @@ class GetLink  extends TelegramOprator
         if(\Cache::has('download_'.$this->chat_id)){
             sendMessage([
                 'chat_id'=>$this->chat_id,
-                'text'=>str()->append("شما در هر دقیقه تنها یکبار میتوانید درخواست دانلود ارسال کنید")->toString()
+                'text'=>str("")->append("شما در هر دقیقه تنها یکبار میتوانید درخواست دانلود ارسال کنید")->toString()
 
             ]);
-            return 0;
+//            return 0;
         }
-        \Cache::put('download_'.$this->chat_id,'1',60);
+//        \Cache::put('download_'.$this->chat_id,'1',60);
         switch ($check){
             case "profile":
                 $username = str_replace('https://www.instagram.com/','',$this->text);

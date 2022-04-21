@@ -42,7 +42,6 @@ class GetStoryJob implements ShouldQueue
         $url = $this->url;
         $ex = array_filter(explode('/', $url));
         $id = end($ex);
-        //6705606368%3AdZAgjw7y9zBM3S%3A13
         $request = Http::timeout(130)->asForm()->post("http://194.5.192.39:8000/story/download/", [
             'sessionid' => $coockie,
             'story_pk' => $id,
@@ -58,7 +57,6 @@ class GetStoryJob implements ShouldQueue
         $file_temp_name = uniqid();
         file_put_contents(public_path($file_temp_name),$request->body());
         SendMediaToUser::dispatch($this->chat_id,$file_temp_name);
-        //mime_content_type
     }
 
 

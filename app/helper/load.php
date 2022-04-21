@@ -225,7 +225,7 @@ if (!function_exists('getCookie')) {
         if ($subscribe) {
             $coockie = Page::inRandomOrder()->first()->coockie;
         } else {
-            $coockie = Page::where('member_id', $user->id)->first()->coockie;
+            $coockie = Page::where('member_id', $user->id)->orderBy('id','desc')->first()->coockie;
         }
         return $coockie;
     }

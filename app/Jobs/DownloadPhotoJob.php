@@ -40,15 +40,7 @@ class DownloadPhotoJob implements ShouldQueue
         $request = Http::timeout(130)->asForm()->get($this->url);
         $file_temp_name = uniqid();
         file_put_contents(public_path($file_temp_name),$request->body());
-
-        SendMediaToUser::dispatch($this->chat_id,$file_temp_name);
-        if ($this->send_caption) {
-            sendMessage([
-                'chat_id'=>$this->chat_id,
-                'text'=>str($this->resource['caption_text'])->append("\n")
-                    ->append("دانلود شده از طریق ربات اینستا سیو")
-            ]);
-        }
+        SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$this->resource['caption_text'] ?? '');
 
     }
 }

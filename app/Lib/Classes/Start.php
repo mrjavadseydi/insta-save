@@ -14,7 +14,7 @@ class Start extends TelegramOprator
     {
         sendMessage([
             'chat_id' => $this->chat_id,
-            'text'=>'start!'
+            'text'=>config('text.start')
         ]);
         setState($this->chat_id);
     }

@@ -41,8 +41,8 @@ class DownloadAlboumJob implements ShouldQueue
         }
         sendMessage([
             'chat_id'=>$this->chat_id,
-            'text'=>str($resource['caption_text'])->append("\n")
-                ->append("دانلود شده از طریق ربات اینستا سیو")
+            'text'=>str($this->info['caption_text'])->append("\n")
+                ->append("دانلود شده از طریق ربات اینستا سیو")->toString()
         ]);
     }
 }

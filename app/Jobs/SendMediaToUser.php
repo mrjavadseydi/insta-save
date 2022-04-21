@@ -16,16 +16,20 @@ class SendMediaToUser implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     public $chat_id;
     public $media;
+    public $caption;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($chat_id,$media)
+    public function __construct($chat_id,$media,$caption="")
     {
         $this->chat_id = $chat_id;
         $this->media = $media;
+        $this->caption = $caption." \n". config('text.caption');
+
     }
+
 
     /**
      * Execute the job.
@@ -49,17 +53,18 @@ class SendMediaToUser implements ShouldQueue
         );
         if ($ex[0] == 'image') {
 
-//            Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
-            sendPhoto([
-                'chat_id' => $this->chat_id,
-                'photo' => $file
-            ]);
+                sendPhoto([
+                    'chat_id' => $this->chat_id,
+                    'photo' => $file,
+                    'caption' => $this->caption
+                ]);
+
         }elseif ($ex[0] == 'video'){
-//            Storage::disk('public')->move($this->media, $this->media.'.'.$ex[1]);
-            sendVideo([
-                'chat_id' => $this->chat_id,
-                'video' => $file
-            ]);
+                sendVideo([
+                    'chat_id' => $this->chat_id,
+                    'video' => $file,
+                    'caption' => $this->caption
+                ]);
         }else{
             sendMessage([
                 'chat_id' => $this->chat_id,

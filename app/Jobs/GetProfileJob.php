@@ -49,12 +49,11 @@ class GetProfileJob implements ShouldQueue
             $request = Http::timeout(130)->get($response['profile_pic_url_hd']);
             $file_temp_name = uniqid();
             file_put_contents(public_path($file_temp_name),$request->body());
-            SendMediaToUser::dispatch($this->chat_id,$file_temp_name);
-        }
-        if (isset($response['biography'])){
+            SendMediaToUser::dispatch($this->chat_id,$file_temp_name, $response['biography']??" ");
+        }else{
             sendMessage([
                 'chat_id' => $this->chat_id,
-                'text' => $response['biography']."\n دانلود شده از ربات اینستا سیو"
+                'text' => "کاربر پروفایل نداشت یا پروفایل شخص قابل دانلود نبود"
             ]);
         }
 
