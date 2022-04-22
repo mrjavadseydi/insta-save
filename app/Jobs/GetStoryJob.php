@@ -41,7 +41,7 @@ class GetStoryJob implements ShouldQueue
     $coockie = getCookie($this->chat_id);
         $url = $this->url;
         $ex = array_filter(explode('/', $url));
-        $id = end($ex);
+        $id = explode("?",end($ex))[0];
         $request = Http::timeout(130)->asForm()->post("http://194.5.192.39:8000/story/download/", [
             'sessionid' => $coockie,
             'story_pk' => $id,

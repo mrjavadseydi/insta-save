@@ -26,7 +26,8 @@ class AddAcount extends TelegramOprator
             ->toString();
         sendMessage([
             'chat_id'=>$this->chat_id,
-            'text'=> $str
+            'text'=> $str,
+            'reply_markup'=>backButton()
         ]);
     }
 

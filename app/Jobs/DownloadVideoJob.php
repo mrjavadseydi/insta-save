@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class DownloadVideoJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public $chat_id,$url,$cookie,$send_caption;
+    public $chat_id,$url,$cookie,$send_caption,$resource;
     /**
      * Create a new job instance.
      *
@@ -22,6 +22,7 @@ class DownloadVideoJob implements ShouldQueue
      */
     public function __construct($chat_id,$url,$cookie,$send_caption=true,$resource)
     {
+        ini_set('memory_limit', '2048M');
         $this->chat_id = $chat_id;
         $this->url = $url;
         $this->cookie = $cookie;
@@ -39,6 +40,6 @@ class DownloadVideoJob implements ShouldQueue
         $request = Http::timeout(130)->asForm()->get($this->url);
         $file_temp_name = uniqid();
         file_put_contents(public_path($file_temp_name),$request->body());
-        SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$this->resource['caption_text']??' ');
+        SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$this->resource['caption_text'] ?? '');
     }
 }

@@ -39,10 +39,8 @@ class DownloadAlboumJob implements ShouldQueue
                 DownloadPhotoJob::dispatch($this->chat_id,$resource['thumbnail_url'],$this->cookie,false,[]);
             }
         }
-        sendMessage([
-            'chat_id'=>$this->chat_id,
-            'text'=>str($this->info['caption_text'])->append("\n")
-                ->append("دانلود شده از طریق ربات اینستا سیو")->toString()
-        ]);
+        SendMessageJob::dispatch($this->chat_id,str($this->info['caption_text']??"")->append("\n")
+            ->append(config('text.caption'))->toString());
+
     }
 }

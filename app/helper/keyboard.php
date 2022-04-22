@@ -3,49 +3,19 @@
 use App\Models\Plan as Plan;
 use Telegram\Bot\Keyboard\Keyboard;
 
-function mainMenu($isVip=false)
+function mainMenu()
 {
 
     $home = [
         [
-            '📮 دریافت بنر 📮'
+            '👤 حساب کاربری من'
         ],
         [
-            '✔️ ثبت دان ✔️',
-            '🖼 ارسال شات 🖼'
+            '📎 دریافت لینک دعوت',
         ],
-
-        ['📨 پشتیبانی 📨',
-            '💰 کیف پول💰']
-        ,
-
-        ['🤔 راهنما 🤔',
-            "🔱VIP🔱",
-            '💲قیمت امروز💲'
-        ]
-
     ];
-    $vip_home = [
-        [
-            '📮 دریافت بنر 📮'
-        ],
 
-        [    '🔱 ثبت دان 🔱',
-            '🔱 ارسال شات 🔱'
-        ],
-        [    '📨 پشتیبانی 📨',
-            '💰 کیف پول💰'
-        ],
-        [    '📃 راهنما 📃',
-            '💲قیمت امروز💲'
-        ]
-    ];
-    if($isVip){
-        $key = Keyboard::button($vip_home);
-    }else{
-        $key = Keyboard::button($home);
-    }
-    return Keyboard::make(['keyboard' => $key, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+    return Keyboard::make(['keyboard' => $home, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
 
 }
 

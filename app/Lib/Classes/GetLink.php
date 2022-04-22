@@ -32,7 +32,7 @@ class GetLink  extends TelegramOprator
         if (!$subscribe&&!$cookie){
             sendMessage([
                 'chat_id'=>$this->chat_id,
-                'text'=>str('شما اشتراک فعالی ندارید ! ')
+                'text'=>str('شما حسابی اضافه نکردید ! ')
                     ->append("\n")
                     ->append('برای دانلود نیاز است اکانت اینستاگرام خود را اضافه کنید')
                     ->append("\n")
@@ -51,9 +51,9 @@ class GetLink  extends TelegramOprator
                 'text'=>str("")->append("شما در هر دقیقه تنها یکبار میتوانید درخواست دانلود ارسال کنید")->toString()
 
             ]);
-//            return 0;
+            return 0;
         }
-//        \Cache::put('download_'.$this->chat_id,'1',60);
+        \Cache::put('download_'.$this->chat_id,'1',60);
         switch ($check){
             case "profile":
                 $username = str_replace('https://www.instagram.com/','',$this->text);
@@ -62,10 +62,9 @@ class GetLink  extends TelegramOprator
                 break;
             case "post":
             case "igtv":
+            case "reel":
             GetPostJob::dispatch($this->text,$this->chat_id);
                 break;
-//                GetIgtvJob::dispatch($this->text,$this->chat_id);
-//                break;
             case "story":
                 GetStoryJob::dispatch($this->text,$this->chat_id);
                 break;
@@ -73,13 +72,15 @@ class GetLink  extends TelegramOprator
         }
         sendMessage([
             'chat_id'=>$this->chat_id,
-            'text'=>str('درخواست شما به صف اضافه شد ، لطفا تا یک دقیقه صبر کنید')->toString()
+            'text'=>str(config('text.wait'))->toString()
         ]);
     }
     public  function getType($link){
+        $link = str_replace('https://instagram.com/','https://www.instagram.com/',$link);
         $validator = \Validator::make(['link'=>$link],[
             'link'=>'starts_with:https://www.instagram.com/',
         ]);
+        $link = explode('?',$link)[0];
         $ex = array_filter(explode('/',str_replace('https://www.instagram.com/','',$link)));
         if ($validator->fails()||count($ex)<1)
             return 'error';
@@ -96,6 +97,9 @@ class GetLink  extends TelegramOprator
                 break;
             case 'stories':
                 return 'story';
+                break;
+            case 'reel':
+                return 'reel';
                 break;
         }
         return  'error';

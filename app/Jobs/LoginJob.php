@@ -45,10 +45,12 @@ class LoginJob implements ShouldQueue
         $body = $request->body();
         if (strpos($body, '}') !== false) {
             $json = json_decode($body, true);
-            $text = 'خطایی رخ داده است لطفا مجددا تلاش کنید';
+            $text = config('text.faild_login');
             if (isset($json['exc_type'])) {
                 if ($json['exc_type'] == 'BadPassword') {
-                    $text = 'نام کاربری یا رمز عبور اشتباه است';
+                    $text = '❌ نام کاربری یا رمز عبور اشتباه است.
+
+لطفا نام کاربری و رمز عبور را بررسی کرده و مجدد ارسال کنید.';
                 }
                 sendMessage([
                     'chat_id' => $this->chat_id,
@@ -59,7 +61,7 @@ class LoginJob implements ShouldQueue
         } else {
             sendMessage([
                 'chat_id' => $this->chat_id,
-                'text' => 'ورود موفقیت آمیز بود ! ',
+                'text' => config('text.success_login'),
             ]);
             Page::create([
                 'member_id' => Member::where('chat_id', $this->chat_id)->first()->id,
