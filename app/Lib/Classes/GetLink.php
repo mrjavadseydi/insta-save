@@ -10,6 +10,9 @@ use App\Lib\Interfaces\TelegramOprator;
 use App\Models\Page;
 use App\Models\Subscription;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+
 class GetLink  extends TelegramOprator
 {
 
@@ -46,14 +49,19 @@ class GetLink  extends TelegramOprator
             return false;
         }
         if(\Cache::has('download_'.$this->chat_id)){
+           $remain =  now()->diffInSeconds(\Cache::get('download_'.$this->chat_id));
+//            $carbon = new Carbon(\Cache::get('download_'.$this->chat_id))->diff;
+            $text = "⚠️ شما در هر دقیقه تنها یکبار میتوانید درخواست دانلود ارسال کنید.
+
+⏳ لطفا $remain ثانیه دیگر مجدد تلاش کنید.";
             sendMessage([
                 'chat_id'=>$this->chat_id,
-                'text'=>str("")->append("شما در هر دقیقه تنها یکبار میتوانید درخواست دانلود ارسال کنید")->toString()
+                'text'=>$text
 
             ]);
             return 0;
         }
-        \Cache::put('download_'.$this->chat_id,'1',60);
+        \Cache::put('download_'.$this->chat_id,now()->addMinute(),60);
         switch ($check){
             case "profile":
                 $username = str_replace('https://www.instagram.com/','',$this->text);
