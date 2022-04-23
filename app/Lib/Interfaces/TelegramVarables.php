@@ -14,6 +14,7 @@ abstract class TelegramVarables
         if ($this->message_type=="callback_query"){
             $this->data = $update["callback_query"]['data'];
             $this->chat_id = $update["callback_query"]['message']['chat']['id'];
+            $this->from_id = $update["callback_query"]['message']['chat']['id'];
             $this->message_id = $update["callback_query"]["message"]['message_id'];
             $this->text = $update["callback_query"]['message']['text'];
             $this->type = $update["callback_query"]['message']['chat']['type'];

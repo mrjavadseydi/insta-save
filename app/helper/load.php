@@ -17,7 +17,7 @@ if (!function_exists('sendMessage')) {
         try {
             return Telegram::sendMessage($arr);
         } catch (TelegramResponseException $e) {
-            return "user has been blocked!";
+            return devLog($e->getMessage());
         }
     }
 }
@@ -64,23 +64,7 @@ if (!function_exists('sendDocument')) {
     }
 }
 
-if (!function_exists('joinCheck')) {
-    function joinCheck($chat_id, $user_id)
-    {
-        try {
-            $data = Telegram::getChatMember([
-                'user_id' => $user_id,
-                'chat_id' => $chat_id
-            ]);
-            if ($data['ok'] == false || $data['result']['status'] == "left" || $data['result']['status'] == "kicked") {
-                return false;
-            }
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-}
+
 if (!function_exists('editMessageText')) {
     function editMessageText($arr)
     {

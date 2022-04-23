@@ -3,6 +3,7 @@ return[
     'classes'=>[
         1=>[
             \App\Lib\Classes\MediaBlocker::class,
+            \App\Lib\Classes\JoinCheck::class,
             \App\Lib\Classes\Start::class,
             \App\Lib\Classes\Help::class,
             \App\Lib\Classes\Banner::class,
@@ -20,8 +21,8 @@ return[
         ],
         3=>[
             \App\Lib\Classes\AddAcount::class,
-            \App\Lib\Classes\GetLink::class,
             \App\Lib\Classes\BuyVip::class,
+            \App\Lib\Classes\GetLink::class,
         ]
     ]
 ];

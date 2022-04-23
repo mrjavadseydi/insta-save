@@ -25,7 +25,7 @@ class BuyVipCallBack extends TelegramOprator
         $ex = explode('-',$this->data);
         deleteMessage([
             'chat_id'=>$this->chat_id,
-            'message_id'=>$this->message_type
+            'message_id'=>$this->message_id
         ]);
         $plan = Plan::whereId($ex[1])->first();
         $payment = Payment::create([

@@ -1,14 +1,12 @@
 <?php
-
-
 namespace App\helper;
 
 
 class Gateway
 {
-    private $apiUrl = 'http://behbank.com/ws';
+    private $apiUrl = 'https://payment.tejaratazad.com/ws';
 
-    private $gatewayUrl = 'http://behbank.com/payment';
+    private $gatewayUrl =  'https://payment.tejaratazad.com/payment';
 
     public function paymentRequest($params){
         $curl = curl_init();

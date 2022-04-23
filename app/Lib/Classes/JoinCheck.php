@@ -9,15 +9,24 @@ class JoinCheck extends TelegramOprator
 
     public function initCheck()
     {
-        return (getConfig('join')&&!joinCheck($this->chat_id,getConfig('channel')));
+        if (\Cache::has('InstaPich_'.$this->chat_id)){
+            return  false;
+        }
+        if (joinCheck($this->chat_id,'InstaPich')){
+            \Cache::put('InstaPich_'.$this->chat_id, 'InstaPich', 180);
+            return false;
+        }
+        else{
+            return true;
+        }
+
     }
 
     public function handel()
     {
         sendMessage([
             'chat_id'=>$this->chat_id,
-            'text'=>str()->append('برای استفاده از ربات باید در کانال ما عضو شوید!')->append("\n")
-            ->append('@'.getConfig('channel'))->toString()
+            'text'=>config('text.join_channel'),
         ]);
     }
 
