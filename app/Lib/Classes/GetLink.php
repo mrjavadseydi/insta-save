@@ -30,12 +30,12 @@ class GetLink  extends TelegramOprator
                 'text'=>str('لینک ارسالی شما صحیح نمیباشد !')->toString()
             ]);
         }
-        $subscribe = Subscription::where('member_id',$this->user->id)->where("end",'>',now())->first();
+        $subscribe =hasRequest($this->chat_id);
         $cookie = Page::where('member_id',$this->user->id)->first();
         if (!$subscribe&&!$cookie){
             sendMessage([
                 'chat_id'=>$this->chat_id,
-                'text'=>str('شما حسابی اضافه نکردید ! ')
+                'text'=>str('شما سکه ندارید! ')
                     ->append("\n")
                     ->append('برای دانلود نیاز است اکانت اینستاگرام خود را اضافه کنید')
                     ->append("\n")
@@ -71,7 +71,7 @@ class GetLink  extends TelegramOprator
             case "post":
             case "igtv":
             case "reel":
-            GetPostJob::dispatch($this->text,$this->chat_id);
+                GetPostJob::dispatch($this->text,$this->chat_id);
                 break;
             case "story":
                 GetStoryJob::dispatch($this->text,$this->chat_id);

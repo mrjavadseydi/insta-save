@@ -44,7 +44,7 @@ class SendMediaToUser implements ShouldQueue
                 'chat_id' => $this->chat_id,
                 'text'=>'فرمت فایل شناسایی نشد'
             ]);
-            return Storage::disk('public')->delete($this->media);
+            return unlink(public_path($this->media));
         }
         $ex  = explode('/',$type);
         $file = InputFile::create(
@@ -71,7 +71,7 @@ class SendMediaToUser implements ShouldQueue
                 'text'=>'فرمت فایل شناسایی نشد'
             ]);
         }
-        return Storage::disk('public')->delete( $this->media);
+        return unlink(public_path($this->media));
 
     }
 }

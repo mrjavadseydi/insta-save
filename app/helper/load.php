@@ -235,6 +235,7 @@ if (!function_exists('subRequestCount')) {
         $user = Member::where('chat_id', $chat_id)->first();
         $user->request_count = $user->request_count - 1;
         $user->save();
+        return true;
     }
 }
 if (!function_exists('hasRequest')) {

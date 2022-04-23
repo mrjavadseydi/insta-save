@@ -38,10 +38,18 @@ class GetPostJob implements ShouldQueue
         $info = $this->getInfo();
         if ($info['media_type']==8){
             DownloadAlboumJob::dispatch($info,$this->chat_id,$this->cookie);
+            (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
+
+
         }elseif ($info['media_type']==2){
             DownloadVideoJob::dispatch($this->chat_id,$info['video_url'],$this->cookie,true,$info);
+            (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
+
+
         }elseif ($info['media_type']==1){
             DownloadPhotoJob::dispatch($this->chat_id,$info['thumbnail_url'],$this->cookie,true,$info);
+            (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
+
         }
     }
     public function getInfo(){

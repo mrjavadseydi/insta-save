@@ -40,7 +40,7 @@ class DownloadAlboumJob implements ShouldQueue
             }
         }
         SendMessageJob::dispatch($this->chat_id,str($this->info['caption_text']??"")->append("\n")
-            ->append(config('text.caption'))->toString());
+            ->append(config('text.caption'))->toString())->delay(now()->addSeconds(20));
 
     }
 }

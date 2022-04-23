@@ -57,6 +57,8 @@ class GetStoryJob implements ShouldQueue
         $file_temp_name = uniqid();
         file_put_contents(public_path($file_temp_name),$request->body());
         SendMediaToUser::dispatch($this->chat_id,$file_temp_name);
+        (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
+
     }
 
 
