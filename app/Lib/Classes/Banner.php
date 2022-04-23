@@ -12,7 +12,7 @@ class Banner extends TelegramOprator
 
     public function handel()
     {
-        $url = "https://t.me/SanistaRoBot?start=inv_".$this->chat_id;
+        $url = "https://t.me/InstaPichBot?start=inv_".$this->chat_id;
         sendMessage([
             'chat_id' => $this->chat_id,
             'text'=>$url,

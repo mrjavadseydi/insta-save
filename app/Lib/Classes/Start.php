@@ -32,7 +32,7 @@ class Start extends TelegramOprator
             $diff = $now->diffInSeconds($user_created);
             if(!$is_invited&&$diff<10&&$from){
                 $from->update([
-                    'request_count'=>$from->request_count+1
+                    'request_count'=>$from->request_count+config('bot.invite')
                 ]);
                 Invite::create([
                     'chat_id'=>$this->chat_id,
