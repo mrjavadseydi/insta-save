@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    Artisan::call("migrate");
     return view('welcome');
 });
 Route::post('/telegram',[\App\Http\Controllers\TelegramController::class,'init']);

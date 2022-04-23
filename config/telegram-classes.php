@@ -4,6 +4,10 @@ return[
         1=>[
             \App\Lib\Classes\MediaBlocker::class,
             \App\Lib\Classes\Start::class,
+            \App\Lib\Classes\Help::class,
+            \App\Lib\Classes\Banner::class,
+            \App\Lib\Classes\Profile::class
+
         ],
         2=>[
             \App\Lib\Classes\LoginAccount::class,

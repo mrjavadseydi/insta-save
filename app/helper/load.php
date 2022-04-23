@@ -220,13 +220,27 @@ if (!function_exists('getCookie')) {
     function getCookie($chat_id)
     {
         $user = Member::where('chat_id', $chat_id)->first();
-        $subscribe = Subscription::where('member_id',$user->id)->where("end",'>',now())->first();
 
-        if ($subscribe) {
+        if ($user->request_count>0) {
             $coockie = Page::inRandomOrder()->first()->coockie;
         } else {
             $coockie = Page::where('member_id', $user->id)->orderBy('id','desc')->first()->coockie;
         }
         return $coockie;
+    }
+}
+if (!function_exists('subRequestCount')) {
+    function SubRequestCount($chat_id)
+    {
+        $user = Member::where('chat_id', $chat_id)->first();
+        $user->request_count = $user->request_count - 1;
+        $user->save();
+    }
+}
+if (!function_exists('hasRequest')) {
+    function hasRequest($chat_id)
+    {
+        $user = Member::where('chat_id', $chat_id)->first();
+        return $user->request_count > 0;
     }
 }
