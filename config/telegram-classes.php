@@ -6,7 +6,12 @@ return[
             \App\Lib\Classes\Start::class,
             \App\Lib\Classes\Help::class,
             \App\Lib\Classes\Banner::class,
-            \App\Lib\Classes\Profile::class
+            \App\Lib\Classes\Profile::class,
+            \App\Lib\Classes\HowAdd::class,
+            \App\Lib\Classes\HowCoin::class,
+            \App\Lib\Classes\HowCopy::class,
+            \App\Lib\Classes\HowDownload::class,
+            \App\Lib\Classes\HowInvite::class,
 
         ],
         2=>[

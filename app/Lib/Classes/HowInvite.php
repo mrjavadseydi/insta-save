@@ -2,20 +2,19 @@
 namespace App\Lib\Classes;
 use App\Lib\Interfaces\TelegramOprator;
 
-class Help extends TelegramOprator
+class HowInvite extends TelegramOprator
 {
 
     public function initCheck()
     {
-        return ($this->message_type=="message"&&($this->text=="🤔 راهنما"||$this->text=="/help"));
+        return ($this->message_type=="message"&&($this->text=="/help_link"));
     }
 
     public function handel()
     {
         sendMessage([
             'chat_id' => $this->chat_id,
-            'text'=>config('text.help'),
-//            'reply_markup'=>mainMenu()
+            'text'=>config('text.how_invite'),
         ]);
         setState($this->chat_id);
     }
