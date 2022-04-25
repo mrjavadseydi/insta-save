@@ -16,7 +16,7 @@ class Banner extends TelegramOprator
 
     public function handel()
     {
-        $url = "https://t.me/InstaPichBot?start=inv_" . $this->chat_id;
+        $url = "https://t.me/InstaPichBot?start=inv_" . safeBase64(base64_encode($this->user->id));
         $file = InputFile::create(
             public_path('banner.jpg'),
             'banner.jpg'
@@ -26,7 +26,6 @@ class Banner extends TelegramOprator
             'chat_id' => $this->chat_id,
             'caption' => $text,
             'photo' => $file
-//            'reply_markup'=>mainMenu()
         ]);
         $repl = config('text.reply_banner');
         $invite = Invite::where('member_id',$this->user->id)->count();

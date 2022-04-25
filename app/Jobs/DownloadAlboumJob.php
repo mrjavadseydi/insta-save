@@ -32,11 +32,14 @@ class DownloadAlboumJob implements ShouldQueue
      */
     public function handle()
     {
+        $i = 1;
         foreach ($this->info['resources'] as $resource){
+            $text = "اسلاید شماره $i \n";
+            $i++;
             if ($resource['media_type']==2){
-                DownloadVideoJob::dispatch($this->chat_id,$resource['video_url'],$this->cookie,false,[]);
+                DownloadVideoJob::dispatch($this->chat_id,$resource['video_url'],$this->cookie,false,[],$text);
             }elseif ($resource['media_type']==1){
-                DownloadPhotoJob::dispatch($this->chat_id,$resource['thumbnail_url'],$this->cookie,false,[]);
+                DownloadPhotoJob::dispatch($this->chat_id,$resource['thumbnail_url'],$this->cookie,false,[],$text);
             }
         }
         SendMessageJob::dispatch($this->chat_id,str($this->info['caption_text']??"")->append("\n")

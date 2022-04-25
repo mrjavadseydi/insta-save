@@ -14,20 +14,21 @@ use Illuminate\Support\Facades\Storage;
 class DownloadPhotoJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public $chat_id,$url,$cookie,$resource,$send_caption;
+    public $chat_id,$url,$cookie,$resource,$send_caption,$pre_text;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($chat_id,$url,$cookie,$send_caption=true,$resource)
+    public function __construct($chat_id,$url,$cookie,$send_caption=true,$resource,$pre_text="")
     {
         $this->chat_id = $chat_id;
         $this->url = $url;
         $this->cookie = $cookie;
         $this->send_caption = $send_caption;
         $this->resource = $resource;
+        $this->pre_text = $pre_text;
     }
 
     /**
@@ -40,7 +41,7 @@ class DownloadPhotoJob implements ShouldQueue
         $request = Http::timeout(130)->asForm()->get($this->url);
         $file_temp_name = uniqid();
         file_put_contents(public_path($file_temp_name),$request->body());
-        SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$this->resource['caption_text'] ?? '');
+        SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$this->pre_text.($this->resource['caption_text'] ?? ''));
 
     }
 }

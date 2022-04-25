@@ -229,3 +229,16 @@ if (!function_exists('hasRequest')) {
         return $user->request_count > 0;
     }
 }
+if (!function_exists('safeBase64')) {
+    function safeBase64($text)
+    {
+        return str_replace('=','Q_',$text);
+    }
+
+}if (!function_exists('safeBase64Return')) {
+    function safeBase64Return($text)
+    {
+        return str_replace('Q_','=',$text);
+    }
+
+}
