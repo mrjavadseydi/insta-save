@@ -23,6 +23,7 @@ class SendAll extends TelegramOprator
         sendMessage([
             'chat_id'=>$this->chat_id,
             'text'=>"پیام مورد نظر را ارسال کنید",
+            'reply_markup'=>backButton()
         ]);
         setState($this->chat_id,'send_to_all');
     }
