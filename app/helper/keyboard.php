@@ -20,6 +20,42 @@ function mainMenu()
     return Keyboard::make(['keyboard' => $home, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
 
 }
+function adminMenu()
+{
+
+    $home = [
+        [
+            'آمار',
+
+        ],
+        [
+            'پیام همگانی',
+        ],
+        ['بازگشت ↪️']
+    ];
+
+    return Keyboard::make(['keyboard' => $home, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+
+}
+function sendAllMenu()
+{
+
+    $home = [
+        [
+            'انصراف',
+        ],
+        [
+            'ارسال',
+
+        ],
+        [
+            'انصراف',
+        ],
+    ];
+
+    return Keyboard::make(['keyboard' => $home, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+
+}
 
 if (!function_exists('backButton')) {
     function backButton()

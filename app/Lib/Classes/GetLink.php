@@ -2,6 +2,7 @@
 
 namespace App\Lib\Classes;
 
+use App\Events\UsersRequest;
 use App\Jobs\GetIgtvJob;
 use App\Jobs\GetPostJob;
 use App\Jobs\GetProfileJob;
@@ -66,6 +67,7 @@ class GetLink  extends TelegramOprator
         \Cache::put('download_'.$this->chat_id,now()->addMinute(),60);
         switch ($check){
             case "profile":
+                event(new UsersRequest($this->chat_id,$check,$this->text));
                 $username = str_replace('https://www.instagram.com/','',$this->text);
                 $username = str_replace('http://www.instagram.com/','',$username);
                 $username = str_replace('https://instagram.com/','',$username);
@@ -76,9 +78,11 @@ class GetLink  extends TelegramOprator
             case "post":
             case "igtv":
             case "reel":
-                GetPostJob::dispatch($this->text,$this->chat_id);
+            event(new UsersRequest($this->chat_id,$check,$this->text));
+            GetPostJob::dispatch($this->text,$this->chat_id);
                 break;
             case "story":
+                event(new UsersRequest($this->chat_id,$check,$this->text));
                 GetStoryJob::dispatch($this->text,$this->chat_id);
                 break;
 

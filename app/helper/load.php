@@ -235,10 +235,19 @@ if (!function_exists('safeBase64')) {
         return str_replace('=','Q_',$text);
     }
 
-}if (!function_exists('safeBase64Return')) {
+}
+if (!function_exists('safeBase64Return')) {
     function safeBase64Return($text)
     {
         return str_replace('Q_','=',$text);
     }
 
 }
+if (!function_exists('isAdmin')) {
+    function isAdmin($chat_id)
+    {
+        return in_array($chat_id,\config('bot.admin'));
+    }
+
+}
+
