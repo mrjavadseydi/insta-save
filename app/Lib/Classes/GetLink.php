@@ -23,6 +23,8 @@ class GetLink  extends TelegramOprator
 
     public function handel()
     {
+        $this->text = explode('?',$this->text)[0];
+
         $check = $this->getType($this->text);
         if ($check=="error"){
             return sendMessage([
@@ -65,6 +67,9 @@ class GetLink  extends TelegramOprator
         switch ($check){
             case "profile":
                 $username = str_replace('https://www.instagram.com/','',$this->text);
+                $username = str_replace('http://www.instagram.com/','',$username);
+                $username = str_replace('https://instagram.com/','',$username);
+                $username = str_replace('http://instagram.com/','',$username);
                 $username = str_replace('/','',$username);
                 GetProfileJob::dispatch($this->chat_id,$username);
                 break;
@@ -88,7 +93,6 @@ class GetLink  extends TelegramOprator
         $validator = \Validator::make(['link'=>$link],[
             'link'=>'starts_with:https://www.instagram.com/',
         ]);
-        $link = explode('?',$link)[0];
         $ex = array_filter(explode('/',str_replace('https://www.instagram.com/','',$link)));
         if ($validator->fails()||count($ex)<1)
             return 'error';
