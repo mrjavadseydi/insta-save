@@ -14,7 +14,7 @@ class SendAll extends TelegramOprator
 
     public function initCheck()
     {
-        return ($this->message_type == "message" && isAdmin($this->chat_id) && ($this->text == "پیام همگانی")&&getState($this->chat_id)=="admin_menu");
+        return ($this->message_type == "message" && isAdmin($this->chat_id) && ($this->text == "📬 پیام همگانی")&&getState($this->chat_id)=="admin_menu");
     }
 
     public function handel()

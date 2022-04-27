@@ -11,7 +11,7 @@ class Menu extends TelegramOprator
 
     public function initCheck()
     {
-        return ($this->message_type == "message" && isAdmin($this->chat_id) && ($this->text == "/panel"||$this->text=="انصراف"));
+        return ($this->message_type == "message" && isAdmin($this->chat_id) && ($this->text == "/panel"||$this->text == "مدیریت"||$this->text=="انصراف"));
     }
 
     public function handel()
