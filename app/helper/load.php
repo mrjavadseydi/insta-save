@@ -251,3 +251,19 @@ if (!function_exists('isAdmin')) {
 
 }
 
+if (!function_exists('DeadCookie')) {
+    function DeadCookie($res,$cookie,$chat_id)
+    {
+        if (isset($res['exc_type'])&&$res['exc_type']=="ClientThrottledError"){
+            Page::where('coockie',$cookie)->delete();
+            sendMessage([
+                'chat_id'=>$chat_id,
+                'text'=>"درخواست شما برای دانلود با خطا مواجه شد!لطفا مجددا تلاش کنید"
+            ]);
+            return false;
+        }
+        return true;
+    }
+
+}
+

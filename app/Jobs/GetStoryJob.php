@@ -48,6 +48,10 @@ class GetStoryJob implements ShouldQueue
             'return_file' => true,
         ]);
         if (isJson($request->body())) {
+            $res =  json_decode($request->body(),true);
+            if (!DeadCookie($res,$coockie,$this->chat_id)) {
+                exit();
+            }
             return sendMessage([
                 'chat_id' => $this->chat_id,
                 'text' => 'دانلود نا موفق بود لطفا بعد از ۲ دقیقه مجددا تلاش کنید',

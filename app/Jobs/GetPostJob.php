@@ -62,8 +62,11 @@ class GetPostJob implements ShouldQueue
             'sessionid'=>$this->cookie,
             'pk'=>(int)$pk,
         ]);
-        return json_decode($request->body(),true);
-
+        $res =  json_decode($request->body(),true);
+        if (!DeadCookie($res,$this->cookie,$this->chat_id)) {
+            exit();
+        }
+        return $res;
     }
 
 }
