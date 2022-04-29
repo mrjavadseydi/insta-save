@@ -41,7 +41,7 @@ class GetProfileJob implements ShouldQueue
         ]);
         $res =  json_decode($request->body(),true);
         if (!DeadCookie($res,$cookie,$this->chat_id)) {
-            exit();
+            return;
         }
         $id = str_replace('"','',$request->body());
         $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/user/info',[

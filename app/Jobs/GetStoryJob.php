@@ -50,7 +50,7 @@ class GetStoryJob implements ShouldQueue
         if (isJson($request->body())) {
             $res =  json_decode($request->body(),true);
             if (!DeadCookie($res,$coockie,$this->chat_id)) {
-                exit();
+               return;
             }
             return sendMessage([
                 'chat_id' => $this->chat_id,

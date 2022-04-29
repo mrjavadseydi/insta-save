@@ -36,6 +36,9 @@ class GetPostJob implements ShouldQueue
     {
         $this->cookie = getCookie($this->chat_id);
         $info = $this->getInfo();
+        if (!$info) {
+            return;
+        }
         if ($info['media_type']==8){
             DownloadAlboumJob::dispatch($info,$this->chat_id,$this->cookie);
             (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
@@ -64,7 +67,7 @@ class GetPostJob implements ShouldQueue
         ]);
         $res =  json_decode($request->body(),true);
         if (!DeadCookie($res,$this->cookie,$this->chat_id)) {
-            exit();
+            return false;
         }
         return $res;
     }
