@@ -54,7 +54,18 @@ class GetProfileJob implements ShouldQueue
             $request = Http::timeout(130)->get($url);
             $file_temp_name = uniqid();
             file_put_contents(public_path($file_temp_name),$request->body());
-            SendMediaToUser::dispatch($this->chat_id,$file_temp_name, $response['biography']??" ");
+            $txt = str("نام صاحب حساب: ".$response['full_name'])->append("\n\n")->append("بیو:")->append($response['biography']??" ")->append("\n\n")
+            ->append("نوع حساب :")
+                ->append($response['is_private']?"خصوصی":"عمومی")
+                ->append("\n\n")
+                ->append("تعداد فالور ها : ")
+                ->append($response['follower_count'])
+                ->append("\n\n")
+                ->append("تعداد فالوینگ ها : ")
+                ->append($response['following_count'])
+                ->toString()
+            ;
+            SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$txt);
             (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
         }else{
             sendMessage([

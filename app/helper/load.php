@@ -208,7 +208,7 @@ if (!function_exists('getCookie')) {
         if ($user->request_count>0) {
             $coockie = Page::inRandomOrder()->first()->coockie;
         } else {
-            $coockie = Page::where('member_id', $user->id)->orderBy('id','desc')->first()->coockie;
+            $coockie = Page::where('member_id', $user->id)->inRandomOrder()->first()->coockie;
         }
         return $coockie;
     }
