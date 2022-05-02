@@ -49,8 +49,9 @@ if (!function_exists('sendVideo')) {
         try {
             return Telegram::sendVideo($arr);
         } catch (TelegramResponseException $e) {
-            return "user has been blocked!";
+            devLog($e->getMessage());
         }
+        return 0;
     }
 }
 if (!function_exists('sendDocument')) {

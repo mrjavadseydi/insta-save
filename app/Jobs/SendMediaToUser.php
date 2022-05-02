@@ -51,6 +51,10 @@ class SendMediaToUser implements ShouldQueue
             asset($this->media),
             $this->media.'.'.$ex[1]
         );
+        if (strlen($this->caption>800)){
+            SendMessageJob::dispatch($this->chat_id,$this->caption)->delay(5);
+            $this->caption =  config('text.caption');
+        }
         if ($ex[0] == 'image') {
 
                 sendPhoto([
