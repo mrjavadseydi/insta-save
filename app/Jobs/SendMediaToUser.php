@@ -18,16 +18,22 @@ class SendMediaToUser implements ShouldQueue
     public $media;
     public $caption;
     /**
+     * @var false
+     */
+    private  $mg;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($chat_id,$media,$caption="")
+    public function __construct($chat_id,$media,$caption="",$mg=false)
     {
         $this->chat_id = $chat_id;
         $this->media = $media;
         $this->caption = $caption." \n". config('text.caption');
 
+        $this->mg = $mg;
     }
 
 
@@ -51,12 +57,11 @@ class SendMediaToUser implements ShouldQueue
             asset($this->media),
             $this->media.'.'.$ex[1]
         );
-        if (strlen($this->caption>800)){
+        if (strlen($this->caption)>1500){
             SendMessageJob::dispatch($this->chat_id,$this->caption)->delay(5);
             $this->caption =  config('text.caption');
         }
         if ($ex[0] == 'image') {
-
                 sendPhoto([
                     'chat_id' => $this->chat_id,
                     'photo' => $file,
@@ -77,5 +82,12 @@ class SendMediaToUser implements ShouldQueue
         }
         return unlink(public_path($this->media));
 
+    }
+    public function __destruct()
+    {
+        deleteMessage([
+            'chat_id' => $this->chat_id,
+            'message_id' => $this->mg
+        ]);
     }
 }

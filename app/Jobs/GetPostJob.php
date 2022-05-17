@@ -16,15 +16,18 @@ class GetPostJob implements ShouldQueue
     public $link;
     public $chat_id;
     public $cookie;
+    private $mg;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($link,$chat_id)
+    public function __construct($link,$chat_id,$mg)
     {
         $this->link = $link;
         $this->chat_id = $chat_id;
+        $this->mg = $mg;
     }
 
     /**
@@ -35,22 +38,32 @@ class GetPostJob implements ShouldQueue
     public function handle()
     {
         $this->cookie = getCookie($this->chat_id);
+        editMessageText([
+            'chat_id' => $this->chat_id,
+            'message_id' => $this->mg,
+            'text' => '⌛وضعیت : دریافت اطلاعات پست ',
+        ]);
         $info = $this->getInfo();
         if (!$info) {
             return;
         }
+        editMessageText([
+            'chat_id' => $this->chat_id,
+            'message_id' => $this->mg,
+            'text' => '⌛وضعیت :دانلود از اینستاگرام ',
+        ]);
         if ($info['media_type']==8){
-            DownloadAlboumJob::dispatch($info,$this->chat_id,$this->cookie);
+            DownloadAlboumJob::dispatch($info,$this->chat_id,$this->cookie,$this->mg);
             (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
 
 
         }elseif ($info['media_type']==2){
-            DownloadVideoJob::dispatch($this->chat_id,$info['video_url'],$this->cookie,true,$info);
+            DownloadVideoJob::dispatch($this->chat_id,$info['video_url'],$this->cookie,true,$info,"",$this->mg);
             (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
 
 
         }elseif ($info['media_type']==1){
-            DownloadPhotoJob::dispatch($this->chat_id,$info['thumbnail_url'],$this->cookie,true,$info);
+            DownloadPhotoJob::dispatch($this->chat_id,$info['thumbnail_url'],$this->cookie,true,$info,"",$this->mg);
             (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
 
         }

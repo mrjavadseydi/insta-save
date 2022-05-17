@@ -14,16 +14,17 @@ use Illuminate\Support\Facades\Storage;
 class GetProfileJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public $chat_id,$username;
+    public $chat_id,$username,$mg;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($chat_id,$username)
+    public function __construct($chat_id,$username,$mg)
     {
         $this->chat_id = $chat_id;
         $this->username = $username;
+        $this->mg = $mg;
     }
 
 
@@ -35,6 +36,11 @@ class GetProfileJob implements ShouldQueue
     public function handle()
     {
         $cookie = getCookie($this->chat_id);
+        editMessageText([
+            'chat_id' => $this->chat_id,
+            'message_id' => $this->mg,
+            'text' => '⌛وضعیت : دریافت پروفایل ',
+        ]);
         $request = Http::timeout(130)->asForm()->post('http://194.5.192.39:8000/user/id_from_username',[
             'username' => $this->username,
             'sessionid' => $cookie
@@ -49,6 +55,11 @@ class GetProfileJob implements ShouldQueue
             'sessionid' => $cookie
         ]);
         $response = json_decode($request->body(),true);
+        editMessageText([
+            'chat_id' => $this->chat_id,
+            'message_id' => $this->mg,
+            'text' => '⌛وضعیت : دانلود پروفایل از اینستاگرام',
+        ]);
         if (isset($response['profile_pic_url_hd'])||isset($response['profile_pic_url'])) {
             $url = $response['profile_pic_url_hd'] ?? $response['profile_pic_url'];
             $request = Http::timeout(130)->get($url);
@@ -65,7 +76,12 @@ class GetProfileJob implements ShouldQueue
                 ->append($response['following_count'])
                 ->toString()
             ;
-            SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$txt);
+            editMessageText([
+                'chat_id' => $this->chat_id,
+                'message_id' => $this->mg,
+                'text' => '⌛وضعیت : ارسال فایل به تلگرام',
+            ]);
+            SendMediaToUser::dispatch($this->chat_id,$file_temp_name,$txt,$this->mg);
             (hasRequest($this->chat_id)&&subRequestCount($this->chat_id));
         }else{
             sendMessage([

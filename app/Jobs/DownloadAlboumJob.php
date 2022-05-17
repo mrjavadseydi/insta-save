@@ -14,15 +14,21 @@ class DownloadAlboumJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     public $info,$chat_id,$cookie;
     /**
+     * @var false
+     */
+    private  $mg;
+
+    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($info,$chat_id,$cookie)
+    public function __construct($info,$chat_id,$cookie,$mg=false)
     {
         $this->info=$info;
         $this->chat_id=$chat_id;
         $this->cookie = $cookie;
+        $this->mg = $mg;
     }
 
     /**
@@ -33,6 +39,11 @@ class DownloadAlboumJob implements ShouldQueue
     public function handle()
     {
         $i = 1;
+        editMessageText([
+            'chat_id' => $this->chat_id,
+            'message_id' => $this->mg,
+            'text' => '⌛وضعیت : دانلود آلبوم ',
+        ]);
         foreach ($this->info['resources'] as $resource){
             $text = "اسلاید شماره $i \n";
             $i++;
@@ -45,5 +56,12 @@ class DownloadAlboumJob implements ShouldQueue
         SendMessageJob::dispatch($this->chat_id,str($this->info['caption_text']??"")->append("\n")
             ->append(config('text.caption'))->toString())->delay(now()->addSeconds(20));
 
+    }
+    public function __destruct()
+    {
+        deleteMessage([
+            'chat_id' => $this->chat_id,
+            'message_id' => $this->mg
+        ]);
     }
 }

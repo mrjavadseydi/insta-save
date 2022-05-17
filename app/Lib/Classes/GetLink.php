@@ -51,7 +51,7 @@ class GetLink  extends TelegramOprator
             ]);
             return false;
         }
-        if(\Cache::has('download_'.$this->chat_id)){
+        if(\Cache::has('download_'.$this->chat_id)&&! isAdmin($this->chat_id)){
            $remain =  now()->diffInSeconds(\Cache::get('download_'.$this->chat_id));
 //            $carbon = new Carbon(\Cache::get('download_'.$this->chat_id))->diff;
             $text = "⚠️ شما در هر دقیقه تنها یکبار میتوانید درخواست دانلود ارسال کنید.
@@ -65,32 +65,57 @@ class GetLink  extends TelegramOprator
             return 0;
         }
         \Cache::put('download_'.$this->chat_id,now()->addMinute(),60);
+
         switch ($check){
             case "profile":
+                sendMessage([
+                    'chat_id'=>$this->chat_id,
+                    'text'=>str(config('text.wait'))->toString()
+                ]);
+                $mg = sendMessage([
+                    'chat_id'=>$this->chat_id,
+                    'text'=>"⌛وضعیت : در صف انتظار "
+                ]);
+                $mg = $mg['message_id'];
                 event(new UsersRequest($this->chat_id,$check,$this->text));
                 $username = str_replace('https://www.instagram.com/','',$this->text);
                 $username = str_replace('http://www.instagram.com/','',$username);
                 $username = str_replace('https://instagram.com/','',$username);
                 $username = str_replace('http://instagram.com/','',$username);
                 $username = str_replace('/','',$username);
-                GetProfileJob::dispatch($this->chat_id,$username);
+                GetProfileJob::dispatch($this->chat_id,$username,$mg);
                 break;
             case "post":
             case "igtv":
             case "reel":
+            sendMessage([
+                'chat_id'=>$this->chat_id,
+                'text'=>str(config('text.wait'))->toString()
+            ]);
+            $mg = sendMessage([
+                'chat_id'=>$this->chat_id,
+                'text'=>"⌛وضعیت : در صف انتظار "
+            ]);
+            $mg = $mg['message_id'];
             event(new UsersRequest($this->chat_id,$check,$this->text));
-            GetPostJob::dispatch($this->text,$this->chat_id);
+            GetPostJob::dispatch($this->text,$this->chat_id,$mg);
                 break;
             case "story":
+                sendMessage([
+                    'chat_id'=>$this->chat_id,
+                    'text'=>str(config('text.wait'))->toString()
+                ]);
+                $mg = sendMessage([
+                    'chat_id'=>$this->chat_id,
+                    'text'=>"⌛وضعیت : در صف انتظار "
+                ]);
+                $mg = $mg['message_id'];
                 event(new UsersRequest($this->chat_id,$check,$this->text));
-                GetStoryJob::dispatch($this->text,$this->chat_id);
+                GetStoryJob::dispatch($this->text,$this->chat_id,$mg);
                 break;
 
         }
-        sendMessage([
-            'chat_id'=>$this->chat_id,
-            'text'=>str(config('text.wait'))->toString()
-        ]);
+
     }
     public  function getType($link){
         $link = str_replace('https://instagram.com/','https://www.instagram.com/',$link);
